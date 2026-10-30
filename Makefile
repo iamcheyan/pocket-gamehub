@@ -5,10 +5,10 @@ TESTS := apps/pocket-gamehub/tests
 
 # Browser tests need a Chromium and puppeteer-core. Override if they live
 # elsewhere: make test-ui CHROME_BIN=... PUPPETEER_CORE=...
-CHROME_BIN ?= /run/current-system/sw/bin/chromium
-PUPPETEER_CORE ?= /home/tetsuya/.bun/install/global/node_modules/puppeteer-core/lib/puppeteer/puppeteer-core.js
+CHROME_BIN ?= $(shell command -v google-chrome 2>/dev/null || command -v chromium 2>/dev/null || command -v chromium-browser 2>/dev/null)
+PUPPETEER_CORE ?= $(HOME)/.bun/install/global/node_modules/puppeteer-core/lib/puppeteer/puppeteer-core.js
 
-.PHONY: run test test-backend test-frontend test-integration test-ui test-ui-flow test-ui-input build
+.PHONY: run test test-backend test-frontend test-integration test-ui test-ui-flow test-ui-input build screenshots
 
 # One command for the whole app: gamed + Vite dev server (proxying /api).
 run:
@@ -41,6 +41,9 @@ test-ui-flow:
 
 test-ui-input:
 	CHROME_BIN=$(CHROME_BIN) PUPPETEER_CORE=$(PUPPETEER_CORE) node $(TESTS)/ui-input-mapping.mjs
+
+screenshots:
+	CHROME_BIN=$(CHROME_BIN) PUPPETEER_CORE=$(PUPPETEER_CORE) node $(TESTS)/capture-screenshots.mjs
 
 build:
 	cd $(BACKEND) && go build ./...
