@@ -12,7 +12,32 @@ Port isolation matters on a shared workstation: several other dev servers alread
 
 RetroArch is not installed in the current development environment, and `/run/current-system/sw/lib/libretro` is absent. No libretro cores or ROM files are available, and this machine has no display/X server. Therefore gameplay has not been tested and the UI must report RetroArch unavailable. The adapter is validated with a stub executable that records its arguments and exits with a selected code. A real installation requires RetroArch, a core compatible with the chosen platform, and legally obtained ROM files. Configure `RETROARCH` (optional binary path), `RETROARCH_CORE` (core path), `RETROARCH_CONFIG` (optional appended config), `GAMEHUB_ROMS` (ROM directory), then scan and launch on a machine with a display/session.
 
-A one-off `nix shell nixpkgs#retroarch -c retroarch --version` was permitted as evidence but was not needed to implement the stub contract; no successful real RetroArch probe is claimed here.
+### Obtainable evidence attempt
+
+`nix shell nixpkgs#retroarch -c retroarch --version` was attempted once. It
+failed because the host's default DNS could not resolve `cache.nixos.org`, so no
+RetroArch binary was ever produced or executed here. This is recorded as a failed
+probe, not as evidence of a working emulator.
+
+### What a real device needs
+
+1. Install RetroArch and a core matching each platform (`mgba` for GB/GBC/GBA,
+   `nestopia`/`snes9x` for NES/SNES, `beetle_psx`/`swanstation` for PS1,
+   `melonds` for NDS, PPSSPP for PSP).
+2. Point `RETROARCH` at the binary, `RETROARCH_CORE` at the core, optionally
+   `RETROARCH_CONFIG` at an appended config.
+3. Put ROMs under `ROMS/<PLATFORM>/`, set `GAMEHUB_ROMS`, then `POST /api/scan`.
+4. Launch from the UI on a machine with a display/DRM session.
+
+Only then does `/api/health` report `emulator: "available"` and `POST /api/launch`
+start a real process.
+
+## Browser tests
+
+`make test-ui` needs Chromium and `puppeteer-core`. Defaults point at
+`/run/current-system/sw/bin/chromium` and the local puppeteer-core install;
+override with `CHROME_BIN=` and `PUPPETEER_CORE=`. The API integration suite
+(`make test-integration`) needs only `curl` and `jq`.
 
 ## Metadata
 

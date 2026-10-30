@@ -1,16 +1,53 @@
 # Architecture
 
 ```text
-React + TypeScript + Vite
-  GameAPI / StorageAPI / MediaAPI / SystemAPI (HTTP defaults)
-       | JSON /api
-       v
-Go gamed (:8080)
-   |-- modernc.org/sqlite database
-   |-- ROM scanner and metadata provider
-   `-- EmulatorAdapter -> RetroArch / external program -> core -> ROM
+React + TypeScript + Vite (frontend/src)
+  GameAPI / StorageAPI / MediaAPI / SystemAPI   ← TS interfaces, HTTP defaults
+                       │ JSON over /api
+                       ▼
+gamed (backend/, Go)                            ← the only business entry point
+  api.go        HTTP routes, JSON/error envelope, HTTP status semantics
+  store.go      SQLite connection, ordered migrations, mock seeding
+  scanner.go    ROM discovery, platform inference, incremental sync
+  adapters.go   EmulatorAdapter: RetroArch / PPSSPP / standalone process
+  metadata.go   MetadataProvider: mock (default) or ScreenScraper
+  main.go       configuration and process wiring
+                       │
+                       ├── SQLite (modernc.org/sqlite, pure Go)
+                       ├── Metadata provider
+                       └── EmulatorAdapter ──▶ RetroArch ──▶ libretro core ──▶ ROM
 ```
 
-The browser never opens ROM files, databases, or emulator processes. All system operations cross the four typed frontend capability interfaces and the gamed REST API. SQLite migrations create schema and seed the mock catalogue on first startup. Mock metadata is the default so the library remains demonstrable without credentials. ROM scans walk a configured root, infer platforms from folder and extension, detect changed files by mtime and size, and report progress through `/api/scan/status`; same stem CUE/BIN files are represented by one CUE game entry.
+The browser never opens ROM files, a database, or an emulator process. Every
+capability crosses one of the four typed frontend interfaces and then the REST
+API; replacing those interfaces with PocketJS Runtime bindings is the intended
+PJOS migration path.
 
-`RetroArchAdapter` launches the external CLI with `-L <core> <rom> --appendconfig=<config>` when configured. Process exit is watched and persisted to history. `SaveState`/`LoadState` require an available RetroArch command channel and explicitly report unsupported in the current desktop process adapter; no save-state format is reimplemented.
+## Request path
+
+1. A view calls `GameAPI` / `StorageAPI` / `MediaAPI` / `SystemAPI`.
+2. The HTTP default implementation issues `fetch('/api/…')`; the Vite dev and
+   preview servers proxy that to `GAMEHUB_API_TARGET`.
+3. `gamed` validates input, performs the SQLite work, and returns JSON. Errors
+   use `{"error":{"code","message"}}` with a meaningful status code.
+4. The UI renders the result. It holds no persistent state of its own: theme,
+   language, favourites and collections all live in `gamed`.
+
+## Discovery
+
+`scanner.go` walks the configured root, maps extensions (`.gb`, `.gbc`, `.gba`,
+`.nes`, `.sfc`, `.smc`, `.nds`, `.chd`, `.cue`, `.iso`, plus PSP `.pbp`/`.cso`)
+and cross-checks the parent directory, so a mislabelled extension does not
+silently land in the wrong platform. A `.cue` and its same-stem `.bin` collapse
+into one disc entry whose size/mtime covers both files. Rescans compare mtime
+and size, count `added`/`updated`/`unchanged`, prune rows whose file vanished
+(bounded to the scan root), and can be cancelled between files.
+
+## Emulator boundary
+
+`RetroArchAdapter.Launch` executes the real CLI contract
+`retroarch -L <core> <rom> --appendconfig=<config>` and returns a session; a
+watcher waits for process exit and writes `exit_at`, `exit_code` and
+`duration` to `history`. Playtime is derived only from those timestamps.
+`SaveState`/`LoadState` require a command channel and explicitly report
+unsupported — no save-state format is reimplemented.
