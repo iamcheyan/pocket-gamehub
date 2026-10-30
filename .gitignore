@@ -1,0 +1,8 @@
+# Build artifacts
+node_modules/
+dist/
+*.db
+
+# Editor / OS
+.DS_Store
+*.swp
