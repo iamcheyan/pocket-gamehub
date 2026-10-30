@@ -34,7 +34,7 @@
 
 **Verification**
 - `make test` = Go vet + Go tests, i18n key parity, `tsc --noEmit`,
-  production build, and a 67-assertion API integration suite.
+  production build, and a 69-assertion API integration suite.
 - `make test-ui` drives the real app in Chromium to prove the 320×240 flow
   (browse → detail → favourite → launch).
 - 58 genuine screenshots (9 views × 6 resolutions + 4 DPI captures), each a

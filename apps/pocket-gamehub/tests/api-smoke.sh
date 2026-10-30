@@ -104,10 +104,12 @@ expect_status "POST /api/collections" 201 -X POST -H 'content-type: application/
 CID="$(jq -er '.id' <"$WORK/body")"
 ok "collection id $CID"
 expect_status "GET /api/collections" 200 "$BASE/api/collections"
-expect_json "collection listed" "any(.[]; .id == $CID)"
+expect_json "collection listed with member ids" "any(.[]; .id == $CID and (.game_ids | type) == \"array\")"
 expect_status "POST /api/collections/{id}/games" 200 -X POST -H 'content-type: application/json' -d '{"game_id":3}' "$BASE/api/collections/$CID/games"
 expect_status "GET /api/collections/{id}" 200 "$BASE/api/collections/$CID"
 expect_json "membership added" 'any(.games[]; .id == 3)'
+expect_status "list exposes membership ids" 200 "$BASE/api/collections"
+expect_json "game_ids tracks membership" "any(.[]; .id == $CID and (.game_ids | index(3)) != null)"
 expect_status "PUT /api/collections/{id}" 200 -X PUT -H 'content-type: application/json' -d '{"name":"Smoke renamed","description":"d"}' "$BASE/api/collections/$CID"
 expect_json "collection renamed" '.name == "Smoke renamed"'
 expect_status "DELETE /api/collections/{id}/games" 200 -X DELETE -H 'content-type: application/json' -d '{"game_id":3}' "$BASE/api/collections/$CID/games"

@@ -17,7 +17,7 @@ provider not configured.
 | GET | `/favorites` | favourite games |
 | POST | `/favorites` | add `{game_id}` → `201 {game_id, favorite:true}` |
 | DELETE | `/favorites/{game_id}` | remove → `204` |
-| GET | `/collections` | `[{id, name, description, game_ids}]` |
+| GET | `/collections` | `[{id, name, description, game_ids}]` — member ids included for client-side filtering |
 | POST | `/collections` | create `{name, description?}` → `201` with the new record |
 | GET | `/collections/{id}` | `{id, name, description, games:[...]}` |
 | PUT | `/collections/{id}` | rename/re-describe `{name, description?}` → updated record |

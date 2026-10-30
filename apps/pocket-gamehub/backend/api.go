@@ -258,21 +258,44 @@ func (s *Server) collections(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		id, _ := res.LastInsertId()
-		jsonOut(w, 201, map[string]any{"id": id, "name": b.Name, "description": b.Description, "games": []Game{}})
+		jsonOut(w, 201, map[string]any{"id": id, "name": b.Name, "description": b.Description, "game_ids": []int64{}, "games": []Game{}})
 		return
 	}
-	rows, e := s.db.Query(`SELECT id,name,description FROM collections ORDER BY name`)
+	// The list carries member ids so the UI can filter a collection without a
+	// request per collection.
+	rows, e := s.db.Query(`SELECT c.id,c.name,COALESCE(c.description,''),cg.game_id
+		FROM collections c LEFT JOIN collection_games cg ON cg.collection_id=c.id
+		ORDER BY c.name, cg.game_id`)
 	if e != nil {
 		fail(w, 500, "database_error", e.Error())
 		return
 	}
 	defer rows.Close()
-	out := []map[string]any{}
+	type collectionRow struct {
+		ID          int64   `json:"id"`
+		Name        string  `json:"name"`
+		Description string  `json:"description"`
+		GameIDs     []int64 `json:"game_ids"`
+	}
+	out := []collectionRow{}
+	index := map[int64]int{}
 	for rows.Next() {
 		var id int64
-		var n, d string
-		_ = rows.Scan(&id, &n, &d)
-		out = append(out, map[string]any{"id": id, "name": n, "description": d})
+		var name, description string
+		var gameID sql.NullInt64
+		if e := rows.Scan(&id, &name, &description, &gameID); e != nil {
+			fail(w, 500, "database_error", e.Error())
+			return
+		}
+		position, seen := index[id]
+		if !seen {
+			out = append(out, collectionRow{ID: id, Name: name, Description: description, GameIDs: []int64{}})
+			position = len(out) - 1
+			index[id] = position
+		}
+		if gameID.Valid {
+			out[position].GameIDs = append(out[position].GameIDs, gameID.Int64)
+		}
 	}
 	jsonOut(w, 200, out)
 }
