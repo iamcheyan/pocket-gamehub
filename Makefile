@@ -8,7 +8,7 @@ TESTS := apps/pocket-gamehub/tests
 CHROME_BIN ?= /run/current-system/sw/bin/chromium
 PUPPETEER_CORE ?= /home/tetsuya/.bun/install/global/node_modules/puppeteer-core/lib/puppeteer/puppeteer-core.js
 
-.PHONY: run test test-backend test-frontend test-integration test-ui build
+.PHONY: run test test-backend test-frontend test-integration test-ui test-ui-flow test-ui-input build
 
 # One command for the whole app: gamed + Vite dev server (proxying /api).
 run:
@@ -31,10 +31,16 @@ test-frontend:
 test-integration:
 	bash $(TESTS)/api-smoke.sh
 
-# Requires the app to be running (make run in another terminal): drives the
-# real UI at 320x240 to prove browse -> detail -> favourite -> launch.
-test-ui:
+# Require the app to be running (make run in another terminal). Drives the real
+# UI: 320x240 flow (browse -> detail -> favourite -> launch) and the keyboard /
+# gamepad mapping panel.
+test-ui: test-ui-flow test-ui-input
+
+test-ui-flow:
 	CHROME_BIN=$(CHROME_BIN) PUPPETEER_CORE=$(PUPPETEER_CORE) node $(TESTS)/ui-320x240-flow.mjs
+
+test-ui-input:
+	CHROME_BIN=$(CHROME_BIN) PUPPETEER_CORE=$(PUPPETEER_CORE) node $(TESTS)/ui-input-mapping.mjs
 
 build:
 	cd $(BACKEND) && go build ./...

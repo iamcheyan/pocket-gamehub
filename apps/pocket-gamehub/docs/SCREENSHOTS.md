@@ -14,12 +14,12 @@ files = sorted(glob.glob('apps/pocket-gamehub/docs/screenshots/*.png'))
 h = collections.defaultdict(list)
 for f in files:
     h[hashlib.sha256(open(f,'rb').read()).hexdigest()].append(f)
-assert len(files) == 58 and len(h) == 58   # 每个文件都是唯一图像
+assert len(files) == 57 and len(h) == 57   # 每个文件都是唯一图像
 ```
 
-结果：`files: 58  unique: 58`，无重复。
+结果：`files: 57  unique: 57`，无重复。
 
-尺寸由 PNG IHDR 头字节读取并与文件名比对，36/36 全部匹配。
+尺寸由 PNG IHDR 头字节读取并与文件名比对，57/57 全部匹配。
 
 ## 复现命令
 
@@ -42,7 +42,7 @@ chromium --headless=new --disable-gpu --no-sandbox --hide-scrollbars \
 
 六种分辨率：320×240、480×320（RG34XX 主目标）、640×480、720×720、1280×720、1920×1080。
 
-DPI 用 `deviceScaleFactor` 1 / 1.5 / 2 / 3 在 480×320 逻辑视口下验证（`dpi-*.png`，物理尺寸分别为 480×320、720×480、960×640、1440×960）。四张图均可读、布局一致，根字号恒为 16px，说明布局由 rem/clamp 驱动而非固定 px 网格。
+DPI 用 `deviceScaleFactor` 1.5 / 2 / 3 在 480×320 逻辑视口下验证（`dpi-1.5x-720x480.png`、`dpi-2x-960x640.png`、`dpi-3x-1440x960.png`；1x 与 `home-480x320.png` 相同故不重复保存）。三张放大图均可读、布局一致，根字号恒为 16px，说明布局由 rem/clamp 驱动而非固定 px 网格。
 
 ## 视图定义（每张图的前置状态）
 
@@ -60,16 +60,15 @@ DPI 用 `deviceScaleFactor` 1 / 1.5 / 2 / 3 在 480×320 逻辑视口下验证�
 
 `light` 与 `home` 不同：前者是简体中文界面，后者是英文；`dark` 与两者都不同。
 
-## 文件清单（9 视图 × 6 分辨率 = 54，另加 4 张 DPI 验证）
+## 文件清单
 
-尺寸由 PNG IHDR 头字节读取并与文件名逐一比对，58/58 全部匹配。
+尺寸由 PNG IHDR 头字节读取并与文件名逐一比对，57/57 全部匹配。
 
 | 文件 | PNG 尺寸 | 视图 / 主题·语言 |
 |---|---:|---|
-| `dpi-1x-480x320.png` | 480×320 | Home @1x DPR / light/en |
-| `dpi-1_5x-480x320.png` | 720×480 | Home @1.5x DPR / light/en |
-| `dpi-2x-480x320.png` | 960×640 | Home @2x DPR / light/en |
-| `dpi-3x-480x320.png` | 1440×960 | Home @3x DPR / light/en |
+| `dpi-1_5x-720x480.png` | 720×480 | Home @1_5x DPR（逻辑视口 480×320） / light/en |
+| `dpi-2x-960x640.png` | 960×640 | Home @2x DPR（逻辑视口 480×320） / light/en |
+| `dpi-3x-1440x960.png` | 1440×960 | Home @3x DPR（逻辑视口 480×320） / light/en |
 | `collections-320x240.png` | 320×240 | Collections / light/en |
 | `dark-320x240.png` | 320×240 | Home（深色） / dark/en |
 | `detail-320x240.png` | 320×240 | Game Detail / light/en |
@@ -125,8 +124,7 @@ DPI 用 `deviceScaleFactor` 1 / 1.5 / 2 / 3 在 480×320 逻辑视口下验证�
 | `search-1920x1080.png` | 1920×1080 | Search "Mario" / light/en |
 | `settings-1920x1080.png` | 1920×1080 | Settings / light/en |
 
-共 58 张。
-
+共 57 张（9 视图 × 6 分辨率 = 54，另加 3 张 DPI 缩放验证）。
 ## 截图过程中发现并修复的真实缺陷
 
 1. **导航被详情页覆盖**：打开 Game Detail 后点击侧栏导航，`selected` 未清除，界面停留在详情页。已在导航 onClick 首行 `setSelected(null)`。

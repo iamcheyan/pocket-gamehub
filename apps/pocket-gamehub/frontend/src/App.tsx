@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { GameAPI, MediaAPI, StorageAPI, SystemAPI, setFavorite, type Collection, type Game, type Health } from './api';
 import { localeFrom, messages, type Locale, type MessageKey } from './i18n';
-import { pressedButtonMask, resolveAction, risingEdgeButtons } from './input';
+import { DPAD_REPEAT_DELAY_MS, keyboardAction, pressedButtonMask, resolveAction, risingEdgeButtons, shouldRepeatDirection, type GamepadAction } from './input';
 import { Gamepad2, GamepadDirectional, Heart, Home, Library, ListFilter, Search, Settings, Sparkles, Star, X, Clock3, Plus, ScanLine, Languages, SunMoon, ChevronLeft, Play, Gamepad, Layers } from 'lucide-react';
 
 type Route = 'home' | 'library' | 'search' | 'collections' | 'settings';
@@ -86,39 +86,66 @@ export function App() {
     if (!name?.trim()) return;
     try { await StorageAPI.createCollection(name.trim()); setCollections(await StorageAPI.collections()); } catch (reason) { setError(getError(reason)); }
   }
-  useEffect(() => {
-    const onKey = (event: KeyboardEvent) => {
-      const target = event.target;
-      if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement) { if (event.key === 'Escape') { target.blur(); if (selected) setSelected(null); } return; }
-      if (['ArrowDown','ArrowUp','ArrowLeft','ArrowRight'].includes(event.key)) {
-        const items = Array.from(document.querySelectorAll<HTMLElement>('[data-focusable]'));
-        const current = items.indexOf(document.activeElement as HTMLElement);
-        const delta = event.key === 'ArrowDown' || event.key === 'ArrowRight' ? 1 : -1;
-        items[(current + delta + items.length) % items.length]?.focus(); event.preventDefault();
-      } else if (event.key === 'Escape' || event.key.toLowerCase() === 'b') { if (selected) setSelected(null); else setRoute('home'); }
-      else if (event.key === 'm' || event.key === 'Tab') { setShowControls(value => !value); if (event.key === 'Tab') event.preventDefault(); }
-      else {
-        const id = document.activeElement?.closest<HTMLElement>('[data-game-id]')?.dataset.gameId;
-        const game = games.find(item => String(item.id) === id);
-        if ((event.key === 'f' || event.key.toLowerCase() === 'x') && game) void favorite(game);
-        else if ((event.key.toLowerCase() === 'i' || event.key.toLowerCase() === 'y') && game) void openGame(game);
-        else if ((event.key === ' ' || event.key.toLowerCase() === 'a') && game) void launch(game);
-      }
-    };
-    window.addEventListener('keydown', onKey); return () => window.removeEventListener('keydown', onKey);
-  }, [games, selected]);
-  useEffect(() => {
-    let frame = 0; let lastAction = 0; let previous = 0;
+  // One action handler serves keyboard, D-Pad and buttons, so the mapping
+  // documented in the controls panel cannot drift from real behaviour.
+  const performAction = useCallback((action: GamepadAction) => {
     const moveFocus = (direction: number) => {
       const items = Array.from(document.querySelectorAll<HTMLElement>('[data-focusable]'));
       if (!items.length) return;
       const current = items.indexOf(document.activeElement as HTMLElement);
       items[(current + direction + items.length) % items.length]?.focus();
     };
-    const shiftRoute = (direction: number) => setRoute(current => {
-      const index = navigation.findIndex(item => item.route === current);
-      return navigation[(index + direction + navigation.length) % navigation.length].route;
-    });
+    const id = document.activeElement?.closest<HTMLElement>('[data-game-id]')?.dataset.gameId;
+    const game = games.find(item => String(item.id) === id);
+    switch (action) {
+      case 'activate': (document.activeElement as HTMLElement | null)?.click(); break;
+      case 'cancel':
+        // Dismiss whatever is topmost: the controls panel, then a game detail.
+        if (showControls) setShowControls(false);
+        else if (selected) setSelected(null);
+        else setRoute('home');
+        break;
+      case 'favorite': if (game) void favorite(game); break;
+      case 'open': if (game) void openGame(game); break;
+      case 'launch': if (game) void launch(game); break;
+      case 'help': setShowControls(value => !value); break;
+      case 'previous': moveFocus(-1); break;
+      case 'next': moveFocus(1); break;
+      case 'previousNav': setRoute(current => {
+        const index = navigation.findIndex(item => item.route === current);
+        return navigation[(index - 1 + navigation.length) % navigation.length].route;
+      }); break;
+      case 'nextNav': setRoute(current => {
+        const index = navigation.findIndex(item => item.route === current);
+        return navigation[(index + 1) % navigation.length].route;
+      }); break;
+    }
+  }, [games, selected, showControls]);
+
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      const target = event.target;
+      const typing = target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement;
+      if (typing) {
+        if (event.key === 'Escape') { target.blur(); if (selected) setSelected(null); }
+        return;
+      }
+      if (event.key.startsWith('Arrow')) {
+        performAction(event.key === 'ArrowDown' || event.key === 'ArrowRight' ? 'next' : 'previous');
+        event.preventDefault();
+        return;
+      }
+      const action = keyboardAction(event.key);
+      if (!action) return;
+      if (action === 'help') event.preventDefault();
+      performAction(action);
+    };
+    window.addEventListener('keydown', onKey); return () => window.removeEventListener('keydown', onKey);
+  }, [performAction, selected]);
+
+  useEffect(() => {
+    let frame = 0; let lastAction = 0; let previous = 0;
+    let heldSince = 0; let heldDirection: -1 | 1 = 1; let lastRepeat = 0;
     const poll = () => {
       const pad = navigator.getGamepads?.()[0];
       if (pad) {
@@ -127,28 +154,30 @@ export function App() {
         for (const button of risingEdgeButtons(pressed, previous)) {
           const action = resolveAction(button, now, lastAction);
           if (!action) continue;
-          const id = document.activeElement?.closest<HTMLElement>('[data-game-id]')?.dataset.gameId;
-          const game = games.find(item => String(item.id) === id);
-          switch (action) {
-            case 'activate': (document.activeElement as HTMLElement | null)?.click(); break;
-            case 'cancel': setSelected(null); break;
-            case 'favorite': if (game) void favorite(game); break;
-            case 'open': if (game) void openGame(game); break;
-            case 'launch': if (game) void launch(game); break;
-            case 'help': setShowControls(value => !value); break;
-            case 'previous': moveFocus(-1); break;
-            case 'next': moveFocus(1); break;
-            case 'previousNav': shiftRoute(-1); break;
-            case 'nextNav': shiftRoute(1); break;
+          performAction(action);
+          if (action === 'next' || action === 'previous') {
+            heldSince = now; lastRepeat = 0; heldDirection = action === 'next' ? 1 : -1;
           }
           lastAction = now;
+        }
+        // Holding a direction scrolls after an initial delay, mirroring the
+        // D-Pad behaviour documented in the controls panel.
+        const stillHeld = (pressed & ((1 << 12) | (1 << 13) | (1 << 14) | (1 << 15))) !== 0;
+        if (stillHeld && heldSince > 0) {
+          const heldFor = now - heldSince;
+          if (shouldRepeatDirection(heldFor, lastRepeat)) {
+            performAction(heldDirection === 1 ? 'next' : 'previous');
+            lastRepeat = heldFor - DPAD_REPEAT_DELAY_MS;
+          }
+        } else if (!stillHeld) {
+          heldSince = 0; lastRepeat = 0;
         }
         previous = pressed;
       }
       frame = requestAnimationFrame(poll);
     };
     frame = requestAnimationFrame(poll); return () => cancelAnimationFrame(frame);
-  }, [games]);
+  }, [performAction]);
   const shown = useMemo(() => {
     let list = [...games];
     const collection = collections.find(item => String(item.id) === String(collectionId));
