@@ -284,51 +284,94 @@ func (s *Server) collectionID(w http.ResponseWriter, r *http.Request) {
 		var b struct {
 			GameID int64 `json:"game_id"`
 		}
-		_ = json.NewDecoder(r.Body).Decode(&b)
-		if r.Method == "POST" {
-			_, e := s.db.Exec(`INSERT OR IGNORE INTO collection_games(collection_id,game_id) VALUES(?,?)`, id, b.GameID)
+		if json.NewDecoder(r.Body).Decode(&b) != nil {
+			fail(w, 400, "invalid_json", "expected game_id")
+			return
+		}
+		switch r.Method {
+		case "POST":
+			res, e := s.db.Exec(`INSERT OR IGNORE INTO collection_games(collection_id,game_id) VALUES(?,?)`, id, b.GameID)
 			if e != nil {
-				fail(w, 404, "not_found", e.Error())
+				fail(w, 404, "collection_not_found", e.Error())
 				return
 			}
-			jsonOut(w, 200, map[string]bool{"ok": true})
-			return
+			n, _ := res.RowsAffected()
+			jsonOut(w, 200, map[string]any{"collection_id": id, "game_id": b.GameID, "added": n > 0})
+		case "DELETE":
+			res, e := s.db.Exec(`DELETE FROM collection_games WHERE collection_id=? AND game_id=?`, id, b.GameID)
+			if e != nil {
+				fail(w, 500, "database_error", e.Error())
+				return
+			}
+			n, _ := res.RowsAffected()
+			jsonOut(w, 200, map[string]any{"collection_id": id, "game_id": b.GameID, "removed": n > 0})
+		default:
+			fail(w, 405, "method_not_allowed", "POST or DELETE required")
 		}
-		if r.Method == "DELETE" {
-			_, _ = s.db.Exec(`DELETE FROM collection_games WHERE collection_id=? AND game_id=?`, id, b.GameID)
-			w.WriteHeader(204)
-			return
-		}
-	}
-	if r.Method == "DELETE" {
-		_, _ = s.db.Exec(`DELETE FROM collections WHERE id=?`, id)
-		w.WriteHeader(204)
 		return
 	}
-	if r.Method == "PUT" {
+
+	switch r.Method {
+	case "DELETE":
+		res, e := s.db.Exec(`DELETE FROM collections WHERE id=?`, id)
+		if e != nil {
+			fail(w, 500, "database_error", e.Error())
+			return
+		}
+		if n, _ := res.RowsAffected(); n == 0 {
+			fail(w, 404, "collection_not_found", "collection not found")
+			return
+		}
+		w.WriteHeader(204)
+	case "PUT":
 		var b struct {
 			Name        string `json:"name"`
 			Description string `json:"description"`
 		}
-		_ = json.NewDecoder(r.Body).Decode(&b)
-		_, e := s.db.Exec(`UPDATE collections SET name=?,description=? WHERE id=?`, b.Name, b.Description, id)
-		if e != nil {
-			fail(w, 400, "invalid_collection", e.Error())
+		if json.NewDecoder(r.Body).Decode(&b) != nil || strings.TrimSpace(b.Name) == "" {
+			fail(w, 400, "invalid_collection", "name required")
 			return
 		}
+		res, e := s.db.Exec(`UPDATE collections SET name=?,description=? WHERE id=?`, b.Name, b.Description, id)
+		if e != nil {
+			fail(w, 409, "collection_exists", e.Error())
+			return
+		}
+		if n, _ := res.RowsAffected(); n == 0 {
+			fail(w, 404, "collection_not_found", "collection not found")
+			return
+		}
+		s.writeCollection(w, id)
+	case "GET":
+		s.writeCollection(w, id)
+	default:
+		fail(w, 405, "method_not_allowed", "GET, PUT or DELETE required")
+	}
+}
+
+// writeCollection returns the collection record together with its members.
+func (s *Server) writeCollection(w http.ResponseWriter, id string) {
+	var name, description string
+	if e := s.db.QueryRow(`SELECT name,COALESCE(description,'') FROM collections WHERE id=?`, id).Scan(&name, &description); e != nil {
+		fail(w, 404, "collection_not_found", "collection not found")
+		return
 	}
 	rows, e := s.db.Query(selectGames+` JOIN collection_games cg ON cg.game_id=games.id WHERE cg.collection_id=? ORDER BY title`, id)
 	if e != nil {
-		fail(w, 404, "not_found", e.Error())
+		fail(w, 500, "database_error", e.Error())
 		return
 	}
 	defer rows.Close()
-	a := []Game{}
+	games := []Game{}
 	for rows.Next() {
-		g, _ := scanGame(rows)
-		a = append(a, g)
+		g, e := scanGame(rows)
+		if e != nil {
+			fail(w, 500, "database_error", e.Error())
+			return
+		}
+		games = append(games, g)
 	}
-	jsonOut(w, 200, map[string]any{"id": id, "games": a})
+	jsonOut(w, 200, map[string]any{"id": id, "name": name, "description": description, "games": games})
 }
 
 func (s *Server) launch(w http.ResponseWriter, r *http.Request) {

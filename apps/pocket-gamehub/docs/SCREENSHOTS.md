@@ -14,10 +14,10 @@ files = sorted(glob.glob('apps/pocket-gamehub/docs/screenshots/*.png'))
 h = collections.defaultdict(list)
 for f in files:
     h[hashlib.sha256(open(f,'rb').read()).hexdigest()].append(f)
-assert len(files) == 36 and len(h) == 36   # 36 个文件 = 36 个唯一图像
+assert len(files) == 58 and len(h) == 58   # 每个文件都是唯一图像
 ```
 
-结果：`files: 36  unique: 36`，无重复。
+结果：`files: 58  unique: 58`，无重复。
 
 尺寸由 PNG IHDR 头字节读取并与文件名比对，36/36 全部匹配。
 
@@ -38,6 +38,12 @@ chromium --headless=new --disable-gpu --no-sandbox --hide-scrollbars \
   --window-size=480,320 --screenshot=home-480x320.png http://127.0.0.1:18480/
 ```
 
+## 分辨率与 DPI
+
+六种分辨率：320×240、480×320（RG34XX 主目标）、640×480、720×720、1280×720、1920×1080。
+
+DPI 用 `deviceScaleFactor` 1 / 1.5 / 2 / 3 在 480×320 逻辑视口下验证（`dpi-*.png`，物理尺寸分别为 480×320、720×480、960×640、1440×960）。四张图均可读、布局一致，根字号恒为 16px，说明布局由 rem/clamp 驱动而非固定 px 网格。
+
 ## 视图定义（每张图的前置状态）
 
 | 视图 | 前置操作 | 主题 | 语言 |
@@ -54,46 +60,72 @@ chromium --headless=new --disable-gpu --no-sandbox --hide-scrollbars \
 
 `light` 与 `home` 不同：前者是简体中文界面，后者是英文；`dark` 与两者都不同。
 
-## 文件清单（9 视图 × 4 分辨率 = 36）
+## 文件清单（9 视图 × 6 分辨率 = 54，另加 4 张 DPI 验证）
 
-| 文件 | 分辨率 | 视图 / 主题 / 语言 |
+尺寸由 PNG IHDR 头字节读取并与文件名逐一比对，58/58 全部匹配。
+
+| 文件 | PNG 尺寸 | 视图 / 主题·语言 |
 |---|---:|---|
-| `home-320x240.png` | 320×240 | Home / light / en |
-| `home-480x320.png` | 480×320 | Home / light / en |
-| `home-720x720.png` | 720×720 | Home / light / en |
-| `home-1280x720.png` | 1280×720 | Home / light / en |
-| `library-320x240.png` | 320×240 | Library / light / en |
-| `library-480x320.png` | 480×320 | Library / light / en |
-| `library-720x720.png` | 720×720 | Library / light / en |
-| `library-1280x720.png` | 1280×720 | Library / light / en |
-| `platform-list-320x240.png` | 320×240 | Platform GBA / light / en |
-| `platform-list-480x320.png` | 480×320 | Platform GBA / light / en |
-| `platform-list-720x720.png` | 720×720 | Platform GBA / light / en |
-| `platform-list-1280x720.png` | 1280×720 | Platform GBA / light / en |
-| `detail-320x240.png` | 320×240 | Game detail / light / en |
-| `detail-480x320.png` | 480×320 | Game detail / light / en |
-| `detail-720x720.png` | 720×720 | Game detail / light / en |
-| `detail-1280x720.png` | 1280×720 | Game detail / light / en |
-| `search-320x240.png` | 320×240 | Search `Mario` / light / en |
-| `search-480x320.png` | 480×320 | Search `Mario` / light / en |
-| `search-720x720.png` | 720×720 | Search `Mario` / light / en |
-| `search-1280x720.png` | 1280×720 | Search `Mario` / light / en |
-| `collections-320x240.png` | 320×240 | Collections / light / en |
-| `collections-480x320.png` | 480×320 | Collections / light / en |
-| `collections-720x720.png` | 720×720 | Collections / light / en |
-| `collections-1280x720.png` | 1280×720 | Collections / light / en |
-| `settings-320x240.png` | 320×240 | Settings / light / en |
-| `settings-480x320.png` | 480×320 | Settings / light / en |
-| `settings-720x720.png` | 720×720 | Settings / light / en |
-| `settings-1280x720.png` | 1280×720 | Settings / light / en |
-| `dark-320x240.png` | 320×240 | Home / dark / en |
-| `dark-480x320.png` | 480×320 | Home / dark / en |
-| `dark-720x720.png` | 720×720 | Home / dark / en |
-| `dark-1280x720.png` | 1280×720 | Home / dark / en |
-| `light-320x240.png` | 320×240 | Home / light / zh |
-| `light-480x320.png` | 480×320 | Home / light / zh |
-| `light-720x720.png` | 720×720 | Home / light / zh |
-| `light-1280x720.png` | 1280×720 | Home / light / zh |
+| `dpi-1x-480x320.png` | 480×320 | Home @1x DPR / light/en |
+| `dpi-1_5x-480x320.png` | 720×480 | Home @1.5x DPR / light/en |
+| `dpi-2x-480x320.png` | 960×640 | Home @2x DPR / light/en |
+| `dpi-3x-480x320.png` | 1440×960 | Home @3x DPR / light/en |
+| `collections-320x240.png` | 320×240 | Collections / light/en |
+| `dark-320x240.png` | 320×240 | Home（深色） / dark/en |
+| `detail-320x240.png` | 320×240 | Game Detail / light/en |
+| `home-320x240.png` | 320×240 | Home（英文浅色） / light/en |
+| `library-320x240.png` | 320×240 | Library 全平台 / light/en |
+| `light-320x240.png` | 320×240 | Home（浅色·简体中文） / light/zh |
+| `platform-list-320x240.png` | 320×240 | Platform GBA 筛选 / light/en |
+| `search-320x240.png` | 320×240 | Search "Mario" / light/en |
+| `settings-320x240.png` | 320×240 | Settings / light/en |
+| `collections-480x320.png` | 480×320 | Collections / light/en |
+| `dark-480x320.png` | 480×320 | Home（深色） / dark/en |
+| `detail-480x320.png` | 480×320 | Game Detail / light/en |
+| `home-480x320.png` | 480×320 | Home（英文浅色） / light/en |
+| `library-480x320.png` | 480×320 | Library 全平台 / light/en |
+| `light-480x320.png` | 480×320 | Home（浅色·简体中文） / light/zh |
+| `platform-list-480x320.png` | 480×320 | Platform GBA 筛选 / light/en |
+| `search-480x320.png` | 480×320 | Search "Mario" / light/en |
+| `settings-480x320.png` | 480×320 | Settings / light/en |
+| `collections-640x480.png` | 640×480 | Collections / light/en |
+| `dark-640x480.png` | 640×480 | Home（深色） / dark/en |
+| `detail-640x480.png` | 640×480 | Game Detail / light/en |
+| `home-640x480.png` | 640×480 | Home（英文浅色） / light/en |
+| `library-640x480.png` | 640×480 | Library 全平台 / light/en |
+| `light-640x480.png` | 640×480 | Home（浅色·简体中文） / light/zh |
+| `platform-list-640x480.png` | 640×480 | Platform GBA 筛选 / light/en |
+| `search-640x480.png` | 640×480 | Search "Mario" / light/en |
+| `settings-640x480.png` | 640×480 | Settings / light/en |
+| `collections-720x720.png` | 720×720 | Collections / light/en |
+| `dark-720x720.png` | 720×720 | Home（深色） / dark/en |
+| `detail-720x720.png` | 720×720 | Game Detail / light/en |
+| `home-720x720.png` | 720×720 | Home（英文浅色） / light/en |
+| `library-720x720.png` | 720×720 | Library 全平台 / light/en |
+| `light-720x720.png` | 720×720 | Home（浅色·简体中文） / light/zh |
+| `platform-list-720x720.png` | 720×720 | Platform GBA 筛选 / light/en |
+| `search-720x720.png` | 720×720 | Search "Mario" / light/en |
+| `settings-720x720.png` | 720×720 | Settings / light/en |
+| `collections-1280x720.png` | 1280×720 | Collections / light/en |
+| `dark-1280x720.png` | 1280×720 | Home（深色） / dark/en |
+| `detail-1280x720.png` | 1280×720 | Game Detail / light/en |
+| `home-1280x720.png` | 1280×720 | Home（英文浅色） / light/en |
+| `library-1280x720.png` | 1280×720 | Library 全平台 / light/en |
+| `light-1280x720.png` | 1280×720 | Home（浅色·简体中文） / light/zh |
+| `platform-list-1280x720.png` | 1280×720 | Platform GBA 筛选 / light/en |
+| `search-1280x720.png` | 1280×720 | Search "Mario" / light/en |
+| `settings-1280x720.png` | 1280×720 | Settings / light/en |
+| `collections-1920x1080.png` | 1920×1080 | Collections / light/en |
+| `dark-1920x1080.png` | 1920×1080 | Home（深色） / dark/en |
+| `detail-1920x1080.png` | 1920×1080 | Game Detail / light/en |
+| `home-1920x1080.png` | 1920×1080 | Home（英文浅色） / light/en |
+| `library-1920x1080.png` | 1920×1080 | Library 全平台 / light/en |
+| `light-1920x1080.png` | 1920×1080 | Home（浅色·简体中文） / light/zh |
+| `platform-list-1920x1080.png` | 1920×1080 | Platform GBA 筛选 / light/en |
+| `search-1920x1080.png` | 1920×1080 | Search "Mario" / light/en |
+| `settings-1920x1080.png` | 1920×1080 | Settings / light/en |
+
+共 58 张。
 
 ## 截图过程中发现并修复的真实缺陷
 

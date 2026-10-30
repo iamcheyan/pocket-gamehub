@@ -6,3 +6,4 @@ dist/
 # Editor / OS
 .DS_Store
 *.swp
+apps/pocket-gamehub/backend/backend
