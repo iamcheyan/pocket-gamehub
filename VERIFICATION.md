@@ -1,8 +1,8 @@
 # Verification — pocket-gamehub @ 2026-10-31
 
 - Verdict: PASS
-- Commit: `__COMMIT__` (fixes + screenshots; this document is the following commit)
-- Remote: `__REMOTE__`
+- Commit: `6bb7c40213bc849b3698fab9d888b1bc0afc981b` (fixes + screenshots; this document is the following commit)
+- Remote: `6bb7c40213bc849b3698fab9d888b1bc0afc981b`
 - Runtime: `gamed` on `127.0.0.1:18470` (fresh temp SQLite, 120-item mock catalogue) + `vite preview` production build on `127.0.0.1:18480`
 - Toolchain: go 1.26.0, node v22.23.3, Chrome 155.0.8059.84; RetroArch/ROMs absent (honest offline state)
 
