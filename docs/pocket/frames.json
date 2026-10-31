@@ -1,0 +1,54 @@
+{
+  "app": "dev.pocket-gamehub.pocket",
+  "output": "pocket-gamehub",
+  "viewport": {
+    "logical": [
+      360,
+      240
+    ],
+    "density": 2,
+    "physical": [
+      720,
+      480
+    ]
+  },
+  "frames": 130,
+  "shots": [
+    {
+      "name": "home",
+      "file": "screen-home.png",
+      "sha256": "f46f49a020b1e7315b19840209b5cb28b715e28a3fb8cad75f067749e563fcf3",
+      "bytes": 40301
+    },
+    {
+      "name": "home-focus",
+      "file": "screen-home-focus.png",
+      "sha256": "4f3b385e897e9840a17b8a18d7afed0b623e2f5d4553e100011f297164fe25c2",
+      "bytes": 40302
+    },
+    {
+      "name": "detail",
+      "file": "screen-detail.png",
+      "sha256": "88630020644e0118fc99ccfafe341948de7dd55d8812fc67cc587576e9f4b1a7",
+      "bytes": 28454
+    },
+    {
+      "name": "detail-action",
+      "file": "screen-detail-action.png",
+      "sha256": "09b19678c7441e89afd265b7d993251f6c1a330953900f394d53def93d1400c1",
+      "bytes": 29406
+    },
+    {
+      "name": "settings",
+      "file": "screen-settings.png",
+      "sha256": "7853da3c793d0713954d74e03467abe112296766e2b7698a6abdfe16b3cd4cf8",
+      "bytes": 38335
+    },
+    {
+      "name": "settings-toggled",
+      "file": "screen-settings-toggled.png",
+      "sha256": "ada4e6df8a80b8ac5ea3ad31b91df15f3a68d40bccbb3f7e583f5360a9431707",
+      "bytes": 38205
+    }
+  ]
+}

@@ -1,5 +1,12 @@
 # Pocket GameHub
 
+
+> **PocketJS port (product target):** `apps/pocket-gamehub/pocket/` is the
+> native PocketJS program (Solid TSX → `.pocket` → `pocket-linux-kms`). The
+> `frontend/` tree remains the frozen React design reference and is not
+> extended. Frames: `docs/pocket/`; verification:
+> `apps/pocket-gamehub/POCKETJS-VERIFICATION.md`.
+
 A handheld-first game library and launcher for PJOS — Steam Deck Home and
 EmulationStation ergonomics, built as the first PJOS reference application.
 

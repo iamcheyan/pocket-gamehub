@@ -21,6 +21,10 @@ assert len(files) == 57 and len(h) == 57   # 每个文件都是唯一图像
 
 尺寸由 PNG IHDR 头字节读取并与文件名比对，57/57 全部匹配。
 
+## 自动截图脚本
+
+`make screenshots`（即 `tests/capture-screenshots.mjs`）会驱动真实 DOM 完成 9 个视图 × 6 个分辨率 + 3 个 DPI，共 57 张；任何哈希重复、PNG 尺寸不符、横向溢出、空白页面或控制台/HTTP 错误都会让运行失败，并写出 `screenshots/manifest.json`（时间戳 + 每张 SHA-256）。
+
 ## 复现命令
 
 ```bash
@@ -34,7 +38,7 @@ npm install && npm run build
 GAMEHUB_API_TARGET=http://127.0.0.1:18470 npx vite preview --host 127.0.0.1 --port 18480 --strictPort
 
 # 3) 单张截图示例
-chromium --headless=new --disable-gpu --no-sandbox --hide-scrollbars \
+"$CHROME_BIN" --headless=new --disable-gpu --no-sandbox --hide-scrollbars \
   --window-size=480,320 --screenshot=home-480x320.png http://127.0.0.1:18480/
 ```
 

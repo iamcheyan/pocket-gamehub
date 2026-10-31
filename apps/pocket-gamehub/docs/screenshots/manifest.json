@@ -1,0 +1,464 @@
+{
+  "captured_at": "2026-10-30T17:06:02.815Z",
+  "ui": "http://127.0.0.1:18480",
+  "api": "http://127.0.0.1:18470",
+  "chrome": "/usr/bin/google-chrome",
+  "screenshots": [
+    {
+      "name": "home-320x240.png",
+      "width": 320,
+      "height": 240,
+      "css": "320x240",
+      "dsf": 1,
+      "sha256": "0f55e5e2bec05fca46d96361fa2f6f400346cc0d1d307f5db43c587c53d330fb"
+    },
+    {
+      "name": "library-320x240.png",
+      "width": 320,
+      "height": 240,
+      "css": "320x240",
+      "dsf": 1,
+      "sha256": "8b4eaa82e1c86ed0450ad56e42edc7589991557a035215c9b01af8b1bfbffd18"
+    },
+    {
+      "name": "platform-list-320x240.png",
+      "width": 320,
+      "height": 240,
+      "css": "320x240",
+      "dsf": 1,
+      "sha256": "2e1dac027d11ce88e5accd5d1fb46be6785da79b110ec9a82db138bd614fa6cd"
+    },
+    {
+      "name": "detail-320x240.png",
+      "width": 320,
+      "height": 240,
+      "css": "320x240",
+      "dsf": 1,
+      "sha256": "e13bb5934598b81790164a3a49457d460bd73b0d71e8917e9ef9c809560efd49"
+    },
+    {
+      "name": "search-320x240.png",
+      "width": 320,
+      "height": 240,
+      "css": "320x240",
+      "dsf": 1,
+      "sha256": "a04569a72cdd6ed562c05e99a21bc629e3a2702dce0d978fe8c7065079c059fc"
+    },
+    {
+      "name": "collections-320x240.png",
+      "width": 320,
+      "height": 240,
+      "css": "320x240",
+      "dsf": 1,
+      "sha256": "657a785c65af7d4d518348eefb6f6f7783d481777e0ec2ff79918f1ad014e557"
+    },
+    {
+      "name": "settings-320x240.png",
+      "width": 320,
+      "height": 240,
+      "css": "320x240",
+      "dsf": 1,
+      "sha256": "963f0914d7fa7ef004a4efc7dd3b3de3d48f351dab862a3af32fad7e0dc31a63"
+    },
+    {
+      "name": "dark-320x240.png",
+      "width": 320,
+      "height": 240,
+      "css": "320x240",
+      "dsf": 1,
+      "sha256": "68773abd237f8f6d52b33b4ee6bf2df6b7eac3194289963236f34b3b5ddeee2d"
+    },
+    {
+      "name": "light-320x240.png",
+      "width": 320,
+      "height": 240,
+      "css": "320x240",
+      "dsf": 1,
+      "sha256": "af8844e9f36df6d00755e702d66cbc38d8a10379d72fb2a0ff085f85cece6011"
+    },
+    {
+      "name": "home-480x320.png",
+      "width": 480,
+      "height": 320,
+      "css": "480x320",
+      "dsf": 1,
+      "sha256": "0d30784e9a4bb74443fb85fee4b04468db329f2da857b51254ea6706d0d896f1"
+    },
+    {
+      "name": "library-480x320.png",
+      "width": 480,
+      "height": 320,
+      "css": "480x320",
+      "dsf": 1,
+      "sha256": "a0ee5e82b816ab0b6ae55d5069fe5ac9740b95d437d7e5b8fc278f32560c75b0"
+    },
+    {
+      "name": "platform-list-480x320.png",
+      "width": 480,
+      "height": 320,
+      "css": "480x320",
+      "dsf": 1,
+      "sha256": "69c5f9b11c43a2cf212b84b15fe8f47d2bbf0b48d8fcbaea578248d5f4406191"
+    },
+    {
+      "name": "detail-480x320.png",
+      "width": 480,
+      "height": 320,
+      "css": "480x320",
+      "dsf": 1,
+      "sha256": "adc4daf4c656695edd882a7d2fa28aed36255432c4bf5ca011718bba4528cbf7"
+    },
+    {
+      "name": "search-480x320.png",
+      "width": 480,
+      "height": 320,
+      "css": "480x320",
+      "dsf": 1,
+      "sha256": "53cc3fcf52992d543a326d23668bf23754efa67628ad351d02914c185f30d3d4"
+    },
+    {
+      "name": "collections-480x320.png",
+      "width": 480,
+      "height": 320,
+      "css": "480x320",
+      "dsf": 1,
+      "sha256": "d387be12f7a58c20e9b60b94c1ee39b72b91ffce0c336a9e3e5abc424e2e2404"
+    },
+    {
+      "name": "settings-480x320.png",
+      "width": 480,
+      "height": 320,
+      "css": "480x320",
+      "dsf": 1,
+      "sha256": "5417a1aa471aba67ef8cd6393ff422adfe92285f0b3042dfe5108c2f91db7a34"
+    },
+    {
+      "name": "dark-480x320.png",
+      "width": 480,
+      "height": 320,
+      "css": "480x320",
+      "dsf": 1,
+      "sha256": "164f69f5e1dab6a7a76edc08e404976008329103d0d6bf5269007653a30ac4e6"
+    },
+    {
+      "name": "light-480x320.png",
+      "width": 480,
+      "height": 320,
+      "css": "480x320",
+      "dsf": 1,
+      "sha256": "aa49abbf86e69850f2ff7d1038300a51402fac79b2561d126604964198388344"
+    },
+    {
+      "name": "home-640x480.png",
+      "width": 640,
+      "height": 480,
+      "css": "640x480",
+      "dsf": 1,
+      "sha256": "5e1a3558a691d47d118668d610ca0c5c2e7a489dca38604ffa7aa337bca573d4"
+    },
+    {
+      "name": "library-640x480.png",
+      "width": 640,
+      "height": 480,
+      "css": "640x480",
+      "dsf": 1,
+      "sha256": "b5653275d53cef02366d3c0538ec1779958f7c3f211128939207a5e4c26e271e"
+    },
+    {
+      "name": "platform-list-640x480.png",
+      "width": 640,
+      "height": 480,
+      "css": "640x480",
+      "dsf": 1,
+      "sha256": "e0a20148df4ff17b7aa9bbe4bc55e7610e7d854ee964ab7ff7b483750a68edda"
+    },
+    {
+      "name": "detail-640x480.png",
+      "width": 640,
+      "height": 480,
+      "css": "640x480",
+      "dsf": 1,
+      "sha256": "584991fed20fc71207cbfe0ea7b9a146e80871bf9e9f6711c0410ab700bf5547"
+    },
+    {
+      "name": "search-640x480.png",
+      "width": 640,
+      "height": 480,
+      "css": "640x480",
+      "dsf": 1,
+      "sha256": "193ef8e5f1c264d8d3ead32e8a2432dc07def4b23db3ec9b811a5c913f40626f"
+    },
+    {
+      "name": "collections-640x480.png",
+      "width": 640,
+      "height": 480,
+      "css": "640x480",
+      "dsf": 1,
+      "sha256": "7d4fdd29a8efb8980f856582db84ba9a8c5f46daaea55e394d27526f468cd77d"
+    },
+    {
+      "name": "settings-640x480.png",
+      "width": 640,
+      "height": 480,
+      "css": "640x480",
+      "dsf": 1,
+      "sha256": "2f2e5a4c0fb27c4ff70f100e4c350dfaa0da148c4907112e5f74b66eec43d5ba"
+    },
+    {
+      "name": "dark-640x480.png",
+      "width": 640,
+      "height": 480,
+      "css": "640x480",
+      "dsf": 1,
+      "sha256": "190500e6ab96890e2b956384ddc7e677d9b8271ce0c01e7d9bd394d9c1ceb183"
+    },
+    {
+      "name": "light-640x480.png",
+      "width": 640,
+      "height": 480,
+      "css": "640x480",
+      "dsf": 1,
+      "sha256": "cebaaf2666af38a77efe4216b3d81ae4ae2d3fd0c698964b4b607cfd5fb9c951"
+    },
+    {
+      "name": "home-720x720.png",
+      "width": 720,
+      "height": 720,
+      "css": "720x720",
+      "dsf": 1,
+      "sha256": "21803b0038460fe55e504a57c56ab117c18a0468dd12dc09b53a1a99a35ca461"
+    },
+    {
+      "name": "library-720x720.png",
+      "width": 720,
+      "height": 720,
+      "css": "720x720",
+      "dsf": 1,
+      "sha256": "98eaaaf8e504a28d8dc547cd802a899adbb97aedc6dca5c78bb4284c3b4c8b8c"
+    },
+    {
+      "name": "platform-list-720x720.png",
+      "width": 720,
+      "height": 720,
+      "css": "720x720",
+      "dsf": 1,
+      "sha256": "dbeef7c7072da0b161c65bceb9c8db2a90209fa56ff64daf686c349b4a20020a"
+    },
+    {
+      "name": "detail-720x720.png",
+      "width": 720,
+      "height": 720,
+      "css": "720x720",
+      "dsf": 1,
+      "sha256": "ee1c447971e4d4d036a5b4feb48030bb65a0730ebe496d855f7eac40b9447684"
+    },
+    {
+      "name": "search-720x720.png",
+      "width": 720,
+      "height": 720,
+      "css": "720x720",
+      "dsf": 1,
+      "sha256": "49347b82afb4fd1ebf42ee76665cf6b62c6de781b7bd2b9e2d0a092f6b946889"
+    },
+    {
+      "name": "collections-720x720.png",
+      "width": 720,
+      "height": 720,
+      "css": "720x720",
+      "dsf": 1,
+      "sha256": "859b2735011450f7ba28f49e135c82d52e8a0999625708cb8b159809c8e785c0"
+    },
+    {
+      "name": "settings-720x720.png",
+      "width": 720,
+      "height": 720,
+      "css": "720x720",
+      "dsf": 1,
+      "sha256": "5dcf4ca72bcd42ee44d21cbc67def70a5e35df02109ee9fcc4858ba6643ea08c"
+    },
+    {
+      "name": "dark-720x720.png",
+      "width": 720,
+      "height": 720,
+      "css": "720x720",
+      "dsf": 1,
+      "sha256": "cdf6492a17deebc4eac2cc02a2cfdf00fa8224d9ae8dd6a33c546153c3f220b2"
+    },
+    {
+      "name": "light-720x720.png",
+      "width": 720,
+      "height": 720,
+      "css": "720x720",
+      "dsf": 1,
+      "sha256": "f02cfdeb076eca2e1b67e46c74c0762468c4dcdd138f33ba0365d38703f36e65"
+    },
+    {
+      "name": "home-1280x720.png",
+      "width": 1280,
+      "height": 720,
+      "css": "1280x720",
+      "dsf": 1,
+      "sha256": "692c5f6fbaa1a2a4e8e4d4e0c44b7203aebae7e0d1ab7a09056884c78a56b01c"
+    },
+    {
+      "name": "library-1280x720.png",
+      "width": 1280,
+      "height": 720,
+      "css": "1280x720",
+      "dsf": 1,
+      "sha256": "43b254e75807362a7076aa2e8135bb10af623d12e9e9aaeda0f413e3277d203e"
+    },
+    {
+      "name": "platform-list-1280x720.png",
+      "width": 1280,
+      "height": 720,
+      "css": "1280x720",
+      "dsf": 1,
+      "sha256": "30ddbfbd7d310ab7aec2dcd74c7e7d3a70ef86becd19f4ac36d22ac833255e79"
+    },
+    {
+      "name": "detail-1280x720.png",
+      "width": 1280,
+      "height": 720,
+      "css": "1280x720",
+      "dsf": 1,
+      "sha256": "5986a0d45f2c785d620399782c013c6ddf0a55a1161ced7b945217341dfb851b"
+    },
+    {
+      "name": "search-1280x720.png",
+      "width": 1280,
+      "height": 720,
+      "css": "1280x720",
+      "dsf": 1,
+      "sha256": "8feb9fd2f908580140bdef5f5116561e982c8e5f054c0a03833ac7e819689a02"
+    },
+    {
+      "name": "collections-1280x720.png",
+      "width": 1280,
+      "height": 720,
+      "css": "1280x720",
+      "dsf": 1,
+      "sha256": "2f85c372b8c6adc040dc045ea3928aae4441b1c07e1b3f16e1057155b9104ca5"
+    },
+    {
+      "name": "settings-1280x720.png",
+      "width": 1280,
+      "height": 720,
+      "css": "1280x720",
+      "dsf": 1,
+      "sha256": "a3dd32cd11952936e526c104a4b6de894142bf1c91ba533d8df59ed7f4262e68"
+    },
+    {
+      "name": "dark-1280x720.png",
+      "width": 1280,
+      "height": 720,
+      "css": "1280x720",
+      "dsf": 1,
+      "sha256": "eeaebb06b6e7576398bbffc83a141db123904673d399e3171494f26f3b69f5a1"
+    },
+    {
+      "name": "light-1280x720.png",
+      "width": 1280,
+      "height": 720,
+      "css": "1280x720",
+      "dsf": 1,
+      "sha256": "f061b6e498b5abbb068a36d58e92235989b1b45edddd592b2e35a94bfeb9f16e"
+    },
+    {
+      "name": "home-1920x1080.png",
+      "width": 1920,
+      "height": 1080,
+      "css": "1920x1080",
+      "dsf": 1,
+      "sha256": "352ebe68819ce9c569c4817558c01e1988a8e62b1c3d872d2e1dfcb9b14fcc5b"
+    },
+    {
+      "name": "library-1920x1080.png",
+      "width": 1920,
+      "height": 1080,
+      "css": "1920x1080",
+      "dsf": 1,
+      "sha256": "d26aa78400845e65eae9f021bba273ba2d04004bc17ae4eea82216f721ec78ae"
+    },
+    {
+      "name": "platform-list-1920x1080.png",
+      "width": 1920,
+      "height": 1080,
+      "css": "1920x1080",
+      "dsf": 1,
+      "sha256": "f1c3b9de56b966275ce30d913bd97d41f40bc6f4d79197e5d60e7608ba093dde"
+    },
+    {
+      "name": "detail-1920x1080.png",
+      "width": 1920,
+      "height": 1080,
+      "css": "1920x1080",
+      "dsf": 1,
+      "sha256": "ab05b7eb2631a418925e67b60ba02493f4f1e0b44368eeb27f30f6601c2a06ed"
+    },
+    {
+      "name": "search-1920x1080.png",
+      "width": 1920,
+      "height": 1080,
+      "css": "1920x1080",
+      "dsf": 1,
+      "sha256": "332122c108210a2387cd0bcdd98b15111ee1fdb8bfff4d726343fa54c76c7ac3"
+    },
+    {
+      "name": "collections-1920x1080.png",
+      "width": 1920,
+      "height": 1080,
+      "css": "1920x1080",
+      "dsf": 1,
+      "sha256": "3b3249ce0d7f6c6b0a2e5c49c46c9167408514d811d1244866f6fe787e9ca027"
+    },
+    {
+      "name": "settings-1920x1080.png",
+      "width": 1920,
+      "height": 1080,
+      "css": "1920x1080",
+      "dsf": 1,
+      "sha256": "5bb7512b73785a01dede12f9b3496c1dfa5c295bf329a59371be04694b08dcd9"
+    },
+    {
+      "name": "dark-1920x1080.png",
+      "width": 1920,
+      "height": 1080,
+      "css": "1920x1080",
+      "dsf": 1,
+      "sha256": "b5e824849c254bc708980a93d1e4eef01770042d3b036e5ecb647ee9c901645a"
+    },
+    {
+      "name": "light-1920x1080.png",
+      "width": 1920,
+      "height": 1080,
+      "css": "1920x1080",
+      "dsf": 1,
+      "sha256": "9ca7d6d9863ec12469febeda5159202c41c99069d2a87493ac031279b6d02174"
+    },
+    {
+      "name": "dpi-1_5x-720x480.png",
+      "width": 720,
+      "height": 480,
+      "css": "480x320",
+      "dsf": 1.5,
+      "sha256": "8193acf4bb68b2e26e5e619562374cf52b161b7d906856db3bbb7c9b2c0f96a9"
+    },
+    {
+      "name": "dpi-2x-960x640.png",
+      "width": 960,
+      "height": 640,
+      "css": "480x320",
+      "dsf": 2,
+      "sha256": "5be3bfa63b263350155ec21cc7bfd7f15ead2e84cebde6bde76b556fa5b805f4"
+    },
+    {
+      "name": "dpi-3x-1440x960.png",
+      "width": 1440,
+      "height": 960,
+      "css": "480x320",
+      "dsf": 3,
+      "sha256": "3eef9842bf230beef66dec619c5db590140ef8bb4fbdb9afa3adf56384a4ee96"
+    }
+  ]
+}

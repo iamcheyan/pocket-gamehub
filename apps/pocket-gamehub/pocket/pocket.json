@@ -1,15 +1,30 @@
 {
   "$schema": "https://pocketjs.dev/schema/pocket-2.json",
   "pocket": 2,
-  "id": "org.pjos.gamehub",
+  "id": "dev.pocket-gamehub.pocket",
   "name": "pocket-gamehub",
-  "title": "Pocket GameHub",
-  "version": "0.2.0",
-  "engine": { "capabilities": { "requires": ["text.glyphs.baked", "input.buttons"] } },
+  "title": "GAMEHUB",
+  "version": "1.0.0",
+  "engine": {
+    "capabilities": {
+      "requires": [
+        "text.glyphs.baked",
+        "input.buttons"
+      ]
+    }
+  },
   "app": {
-    "entry": "main.tsx",
+    "entry": "src/main.tsx",
     "output": "pocket-gamehub",
     "framework": "solid",
-    "viewport": { "fixed": { "logical": [360, 240], "presentation": "integer-fit" } }
+    "viewport": {
+      "fixed": {
+        "logical": [
+          360,
+          240
+        ],
+        "presentation": "native"
+      }
+    }
   }
 }
