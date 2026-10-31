@@ -1,0 +1,17 @@
+{
+  "app": "gamehub",
+  "package_sha256": "8cab816a8489421d4343da6cd41e0173c17076bb15d6837deb565388d65bdf57",
+  "launcher_before": "18645",
+  "launcher_after": "28102",
+  "boot_sha256": "6ed41612bce1723d1eda64b5a0ee9333a105ed498b7085c03267539cf6c1b32d",
+  "frames": [
+    "home",
+    "home-focus",
+    "detail",
+    "detail-action",
+    "settings",
+    "settings-toggled"
+  ],
+  "runtime": "/mnt/sdcard/System/pocketjs/bin/pocket-linux-kms",
+  "deploy": "/storage/pjs/pocket-gamehub"
+}
