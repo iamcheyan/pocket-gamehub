@@ -1,0 +1,11 @@
+{
+  "name": "pocket-gamehub",
+  "private": true,
+  "scripts": {
+    "dev": "bash scripts/pocket-desktop-preview.sh",
+    "test": "tsc --noEmit -p ../../../../pjs-app-build/apps/pocketshell/tsconfig.json && bun test pocket-model.test.ts"
+  },
+  "devDependencies": {
+    "typescript": "5.8.3"
+  }
+}

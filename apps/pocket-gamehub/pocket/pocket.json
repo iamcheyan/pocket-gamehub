@@ -1,0 +1,15 @@
+{
+  "$schema": "https://pocketjs.dev/schema/pocket-2.json",
+  "pocket": 2,
+  "id": "org.pjos.gamehub",
+  "name": "pocket-gamehub",
+  "title": "Pocket GameHub",
+  "version": "0.2.0",
+  "engine": { "capabilities": { "requires": ["text.glyphs.baked", "input.buttons"] } },
+  "app": {
+    "entry": "main.tsx",
+    "output": "pocket-gamehub",
+    "framework": "solid",
+    "viewport": { "fixed": { "logical": [360, 240], "presentation": "integer-fit" } }
+  }
+}
